@@ -22,6 +22,7 @@ class FormInscriptionSubmitHome extends Middleware {
             // csrf token valide next
                 
             $_SESSION['form_error'] = [];
+
             $email = $request->getParam('email');
             $password = $request->getParam('password');
             $samepassword = $request->getParam('samepassword');

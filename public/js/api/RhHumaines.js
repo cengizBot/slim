@@ -84,11 +84,11 @@
                 // icone employe
                 let img = $('<img src="./public/img/employ.png" style="width: 45px" >');
                 //icone fleche
-                let fleche_bas = $(`<a data-toggle="collapse" role="button"  aria-controls="collapse_${datas.datas[i].name}" class="none_deco" href="#collapse_${datas.datas[i].name}" ><img class="pointer fleche_margin" id="fleche_bas" src="./public/img/fleche_bas.png" > </a>`);
-                let fleche_haut = $(`<a type="button" data-toggle="collapse" data-target="#collapse_${datas.datas[i].name}" aria-expanded="false" aria-controls="collapse_${datas.datas[i].name}" class="none_deco " ><img class="pointer fleche_margin" id="fleche_haut" src="./public/img/fleche_haut.png" ></a>`);
+                let fleche_bas = $(`<a data-toggle="collapse" role="button"  aria-controls="collapse_${datas.datas[i].name}_${datas.datas[i].id}" class="none_deco" href="#collapse_${datas.datas[i].name}_${datas.datas[i].id}" ><img class="pointer fleche_margin" id="fleche_bas" src="./public/img/fleche_bas.png" > </a>`);
+                let fleche_haut = $(`<a type="button" data-toggle="collapse" data-target="#collapse_${datas.datas[i].name}_${datas.datas[i].id}" aria-expanded="false" aria-controls="collapse_${datas.datas[i].name}_${datas.datas[i].id}" class="none_deco " ><img class="pointer fleche_margin" id="fleche_haut" src="./public/img/fleche_haut.png" ></a>`);
     
                 //div more news about employe
-                let div_collaspe = $(`<div class="collapse" id="collapse_${datas.datas[i].name}">`);
+                let div_collaspe = $(`<div class="collapse" id="collapse_${datas.datas[i].name}_${datas.datas[i].id}">`);
                 let div_collaspe_card = $(`<div class="card card-body">`);
     
                 //collapse card div

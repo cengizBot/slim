@@ -18,6 +18,7 @@
     let years = $('#years_input');
     let date_enter = $('#enter_date');
 
+
     let error = 0;
     let array_input = [name,firstname,email,fonction,city,years,date_enter];
 
@@ -116,7 +117,7 @@
 
           case "fonction":
 
-              if(!string_r.test($(input).val())){
+              if(!stringSpace_r.test($(input).val())){
 
                 $(small).text('Erreur champ incorrect');
                 $(input).addClass('input_error');
@@ -135,7 +136,15 @@
                 $(input).addClass('input_error');
                 error ++;
               }else{
-                $(input).addClass('input_success');
+                // test if years is correct 18 - 65 years
+                if($(input).val() < 18 ||  $(input).val() > 65 ){
+                  $(small).text('Erreur champ incorrect (18 - 65 ans Min / Max)');
+                  $(input).addClass('input_error');
+                  error ++;
+                }else{
+                  $(input).addClass('input_success');
+                }
+             
               }
               
               break;
@@ -148,7 +157,21 @@
                 $(input).addClass('input_error');
                 error ++;
               }else{
-                $(input).addClass('input_success');
+                //must correspond to the current year
+                let formatDay = new Date($(input).val());
+                let years = formatDay.getFullYear();
+                // current years
+                let current = new Date().getFullYear();
+            
+                // if(years != current){
+                
+                //   $(small).text("Erreur l'année doit correspondre à l'année en cours");
+                //   $(input).addClass('input_error');
+                //   error ++;
+                // }else{
+                //   $(input).addClass('input_success');
+                // }
+          
               }
               
               break;

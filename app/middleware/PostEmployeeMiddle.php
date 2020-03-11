@@ -14,6 +14,8 @@ class FormEmployeeSubmitInterface extends Middleware {
     CONST string_r =  "/^[a-zA-Z]*$/";
     CONST email_r = "/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/";
     CONST int_r = "/^[0-9]*$/";
+    CONST stringSpace_r =  "/^[a-zA-Z ]*$/";
+    CONST date_r = "/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/";
     private $employee;
 
 
@@ -44,6 +46,11 @@ class FormEmployeeSubmitInterface extends Middleware {
                     array_push($_SESSION['form_error'],$error_name);
 
                 }else{
+
+                    if(!preg_match(self::string_r,$name)){
+                        $error_name = [ "input" => "name", "error" => "Champ incorrect" ];
+                        array_push($_SESSION['form_error'],$error_name);
+                    }
                 
                 }
 
@@ -53,7 +60,10 @@ class FormEmployeeSubmitInterface extends Middleware {
                     array_push($_SESSION['form_error'],$error_firstname);
 
                 }else{
-                
+                    if(!preg_match(self::string_r,$firstname)){
+                        $error_firstname = [ "input" => "firstname", "error" => "Champ incorrect" ];
+                        array_push($_SESSION['form_error'],$error_firstname);
+                    }
                 }
 
                 if(strlen($email) === 0){
@@ -76,7 +86,10 @@ class FormEmployeeSubmitInterface extends Middleware {
                     array_push($_SESSION['form_error'],$error_city);
 
                 }else{
-                
+                    if(!preg_match(self::stringSpace_r,$error_city)){
+                        $error_city = [ "input" => "city", "error" => "Champ incorrect" ];
+                        array_push($_SESSION['form_error'],$error_city);
+                    }
                 }
 
                 if(strlen($fonction) === 0){
@@ -85,16 +98,28 @@ class FormEmployeeSubmitInterface extends Middleware {
                     array_push($_SESSION['form_error'],$error_fonction);
 
                 }else{
-                
+                    if(!preg_match(self::stringSpace_r,$fonction)){
+                        $error_fonction = [ "input" => "fonction", "error" => "Champ incorrect" ];
+                        array_push($_SESSION['form_error'],$error_fonction);
+                    }
                 }
 
                 if(strlen($years) === 0){
 
-                    $error_years = [ "input" => "name", "error" => "empty" ];
+                    $error_years = [ "input" => "Age", "error" => "empty" ];
                     array_push($_SESSION['form_error'],$error_years);
 
                 }else{
-                
+                    if(!preg_match(self::int_r,$years)){
+                        $error_years = [ "input" => "years", "error" => "Champ incorrect" ];
+                        array_push($_SESSION['form_error'],$error_years);
+                    }else{
+                        if($years < 18 || $years > 65 ){
+                            $error_years = [ "input" => "years", "error" => "Erreur champ incorrect (18 - 65 ans Min / Max)" ];
+                            array_push($_SESSION['form_error'],$error_years);
+                       
+                        }
+                    }
                 }
 
                 if(strlen($enter_date) === 0){
@@ -103,7 +128,22 @@ class FormEmployeeSubmitInterface extends Middleware {
                     array_push($_SESSION['form_error'],$enter_date);
 
                 }else{
-                
+                    if(!preg_match(self::date_r,$enter_date)){
+                        $error_enter_date = [ "input" => "enter_date", "error" => "Champ incorrect" ];
+                        array_push($_SESSION['form_error'],$error_enter_date);
+                    }else{
+                        //must correspond to the current year
+                        //get years
+                        $formatDay = date("Y", strtotime($enter_date));
+                        //current years
+                        $current = date("Y");  
+
+                        if($formatDay != $current){
+                            $error_enter_date = [ "input" => "Date d'entrée", "error" => "Erreur l'année doit correspondre à l'année en cours" ];
+                            array_push($_SESSION['form_error'],$error_enter_date);
+                        }
+
+                    }
                 }
 
                 $error = count($_SESSION['form_error']);
@@ -111,11 +151,19 @@ class FormEmployeeSubmitInterface extends Middleware {
                 // 0 error in form go to inscription
                 if($error === 0 ){
 
-                    $this->employee = new Employee($name,$firstname,$email,$fonction,$years,$city,$this->container);
-                    $this->employee->postEmployee();
+                    $this->employee = new Employee($name,$firstname,$email,$fonction,$years,$city,$enter_date,$this->container);
+                    $post = $this->employee->postEmployee();
+
+                    if(!$post){
+                        // email already save
+                        // return error not save employee
+                        $error_post = [ "input" => "Email", "error" => "Email dejâ enregistré" ];
+                        array_push($_SESSION['form_error'],$error_post);
+                    }else{
+                        $success_post = [ "success" => "Success", "msg" => "Enregistrement réussi" ];
+                        array_push($_SESSION['form_error'],$success_post);
+                    }
          
-                }else{
-                    // return error form
                 }
 
                 return $next($request, $response);
