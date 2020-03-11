@@ -1,0 +1,112 @@
+.home_template{
+    background: linear-gradient(0.25turn, #3f87a6, #ebf8e1, #f69d3c);
+
+}
+
+.menu_interface{
+    background-color: #DFDEDE;
+    list-style-type: none;
+    cursor: pointer;
+}
+
+.red{
+    color: red;
+}
+
+.input_error{
+    border-color: red;
+}
+
+.input_success{
+    border-color: green;
+}
+
+.pointer{
+    cursor: pointer;
+}
+.none_deco{
+    text-decoration: none;
+}
+
+.fleche_margin{
+    margin: 5px;
+}
+
+.style_display_employ{
+    margin: 5px;
+    width: 100%;
+   
+}
+
+.div_border_r{
+    border-right: 1px solid black;
+}
+
+.max_width{
+    width: 100%;
+}
+
+.flex_line{
+    display: inline-flex;
+}
+
+.puce_none{
+    list-style-type: none;
+}
+
+.menu_interface :hover{
+    background-color: #0D0D0D;
+    color: white;
+}
+
+.line_li{
+    background-color: #DFDEDE;
+    list-style-type: none;
+}
+
+.line{
+    width: 80%;
+    margin: 0 auto;
+    background-color: black;
+    height: 1px;
+}
+
+.div_interface_menu{
+    padding: 50px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.content_inscription{
+
+    width: 50%;
+    margin: 0 auto;
+}
+
+.form_content{
+
+    margin-top: 100px;
+
+}
+
+.error_input{
+    color: red;
+}
+
+.success_form{
+    color: green;
+}
+
+.user-navbar{
+   background-color: #E8E5E5;
+}
+
+
+.choice_menu{
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.inline_txt{
+    display: inline-block;
+}
