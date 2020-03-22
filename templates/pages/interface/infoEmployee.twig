@@ -1,0 +1,150 @@
+{% extends '././header.twig' %}
+
+  {% block body %}
+
+  <br/>
+  <button style="margin-left:10px" type="button" onclick="back()" class="btn btn-primary">Retour</button>
+  <script>
+
+  function back(){
+    window.location = 'http://localhost:8080/interface';
+    document.cookie = `Menu=back;path=/`;
+
+  }
+
+  </script>
+
+
+  <div class="container">
+  </br>
+    <div class='row' style="margin-right:0px">
+          <div style="margin-right:30px" class='col-lg-5 col-md-5 border-style-div'>
+
+            <div style="margin-top:20px;text-align:center"><span style="font-size:20px;font-weight:bold">Informations</span><img style="width:50px;margin-top:-30px" src="/public/img/employ.png"></div>
+            <br/><br/>
+              <div>
+                  <div >
+                      <table class="table">
+                        <tbody>
+                          <tr>
+                            <th scope="row">Nom</th>
+                            <td>{{ data['data']['employee'][0].name }}</td>
+                          </tr>
+
+                          <tr>
+                            <th scope="row">Prénom</th>
+                            <td>{{ data['data']['employee'][0].firstname }}</td>
+                          </tr>
+
+                          <tr>
+                            <th scope="row">Email</th>
+                            <td>{{ data['data']['employee'][0].email }}</td>
+                          </tr>
+
+                          <tr>
+                            <th scope="row">Fonction</th>
+                            <td>{{ data['data']['employee'][0].fonction }}</td>
+                          </tr>
+                      
+                          <tr>
+                            <th scope="row">Age</th>
+                            <td>{{ data['data']['employee'][0].years }}</td>
+                          </tr>
+
+                          <tr>
+                            <th scope="row">Ville</th>
+                            <td>{{ data['data']['employee'][0].city }}</td>
+                          </tr>
+
+                          <tr>
+                            <th scope="row">Date d'entrée</th>
+                            <td>{{ data['data']['employee'][0].date_entrer }}</td>
+                          </tr>
+
+                          <tr>
+                            <th scope="row">Heures Cumulées</th>
+                            <td>{{ data['data']['employee'][0].heures_cumul }}</td>
+                          </tr>
+
+                          <tr>
+                            <th scope="row">Absences</th>
+                            <td style="color:red" >{{ data['data']['employee'][0].absences }}</td>
+                          </tr>
+
+
+                          <tr>
+                            <th scope="row">Salaire</th>
+                            <td style="color:green">{{ data['data']['employee'][0].salaire }}</td>
+                          </tr>
+
+                          <tr>
+                            <th scope="row">Horaire</th>
+                            <td>{{ data['data']['employee'][0].horaire }}</td>
+                          </tr>
+
+                        </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+
+          <div class='col-lg-5 col-md-5 border-style-div'>
+          
+            <canvas id="myChart"  width="50" height="50" style="width:500px;height:500px"></canvas>
+            <span style="display:none" id="heures_cumul">{{ data['data']['employee'][0].heures_cumul }}</span>
+            <span style="display:none" id="absences">{{ data['data']['employee'][0].absences }}</span>
+            <span style="display:none" id="horaire">{{ data['data']['employee'][0].horaire }}</span>
+          </div>
+
+    </div>
+  </div>
+
+
+
+<script>
+let ctx = document.getElementById('myChart').getContext('2d');
+let Hcumul = document.getElementById('heures_cumul').textContent;
+let absencesJ = document.getElementById('absences').textContent;
+let horaire = document.getElementById('horaire').textContent;
+let Hmatin = parseInt(horaire[0]);
+let Happ = parseInt(horaire[4] + horaire[5]);
+let Heures_abs = Happ - Hmatin;
+let TTHeuresABS = parseInt(absencesJ) * Heures_abs;
+Hcumul = parseInt(Hcumul);
+
+
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Heures Cumulées', `Absences en Jours, ${absencesJ} jours ` , `Absences une journée en  H , ${absencesJ} h`,`Heures totaux absence , ${absencesJ} h`],
+        datasets: [{
+            label: 'Employe graphique ',
+            data: [Hcumul, absencesJ,Heures_abs,TTHeuresABS],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+</script>
+    
+
+
+  {% endblock %}

@@ -15,13 +15,14 @@ class Middleware {
     protected $container;
     protected $user;
     protected $user_manager;
-
+    protected $employee;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->user = new Users($this->container);
         $this->user_manager = new UserManager();
+        $this->employee = new Employee($this->container);              
         
     }
 

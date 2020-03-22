@@ -49,7 +49,7 @@ class FormConnexionSubmitHome extends Middleware {
             $jwt = $this->user_manager->getTokenEncode();
             
             // set cookie
-            setcookie("token", $jwt);
+            setcookie("token", $jwt,time()+3600);
             // get in header the token for access page restric
             $request->withAddedHeader('token',$_COOKIE["jwt"]);
 

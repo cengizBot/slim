@@ -5,7 +5,6 @@ use Psr\Container\ContainerInterface;
 
 class Employee {
 
-
     private $container;
     private $name;
     private $firstname;
@@ -15,15 +14,10 @@ class Employee {
     private $city;
     private $enter_date;
 
-    public function __construct($name,$firstname,$email,$fonction,$years,$city,$enter_date,ContainerInterface $container)
+    CONST int_r = "/^[0-9]*$/";
+
+    public function __construct(ContainerInterface $container)
     {
-        $this->name = $name;
-        $this->firstname = $firstname;
-        $this->email = $email;
-        $this->fonction = $fonction;
-        $this->years = $years;
-        $this->city = $city;
-        $this->enter_date = $enter_date;
         $this->container = $container;
     }
 
@@ -35,6 +29,46 @@ class Employee {
  
         return $result;
 
+    }
+
+    public function getById($id){
+
+        $id = htmlentities(strip_tags($id));
+
+        // not int return false
+        if(!preg_match(self::int_r,$id)){
+            return false;
+        }
+
+        $datas = $this->container->db->prepare('SELECT * FROM employes,fiche WHERE fiche.id_employee = employes.id AND employes.id = :id  ');
+        $datas->bindParam(':id', $id);
+        $datas->execute();
+        $result = $datas->fetchAll();
+
+        if($result){
+           
+            return $result;
+        }
+        // else return false
+        return false;
+ 
+    }
+
+    public function getbyEmail($email){
+
+        
+        $datas = $this->container->db->prepare('SELECT * FROM employes WHERE email = :email');
+        $datas->bindParam(':email', $email);
+        $datas->execute();
+        $result = $datas->fetchAll();
+        
+        if($result){
+           
+            return $result;
+        }
+        // else return false
+        return false;
+ 
     }
 
     public function checkEmail($email){
@@ -54,17 +88,17 @@ class Employee {
     
     }
 
-    public function postEmployee(){
+    public function postEmployee($name = null,$firstname= null,$email= null,$fonction= null,$years= null,$city= null,$enter_date= null){
 
         try{
 
-            $this->name = strip_tags($this->name);
-            $this->firstname = strip_tags($this->firstname);
-            $this->email = strip_tags($this->email);
-            $this->fonction = strip_tags($this->fonction);
-            $this->years = strip_tags($this->years);
-            $this->city = strip_tags($this->city);
-            $this->enter_date = strip_tags($this->enter_date);
+            $this->name = strip_tags($name);
+            $this->firstname = strip_tags($firstname);
+            $this->email = strip_tags($email);
+            $this->fonction = strip_tags($fonction);
+            $this->years = strip_tags($years);
+            $this->city = strip_tags($city);
+            $this->enter_date = strip_tags($enter_date);
 
             $check_email = $this->checkEmail($this->email);
 
@@ -86,13 +120,34 @@ class Employee {
             $stmt->bindParam(':date_entrer', $this->enter_date);
             $stmt->execute();
 
+            // add automat... table fiche random data in
+            $get = $this->getbyEmail($this->email);
+            $id = $get[0]['id'];
+
+            $heures_cumul = random_int(50,590);
+            $absences = random_int(1,10);
+            $salaire = random_int(1500,3785);
+
+            $h_matin =  strval(random_int(5,8));
+            $h_aprem =  strval(random_int(15,20));
+
+            $heur_travail = $h_matin . " - " . $h_aprem;
+
+            $query = $this->container->db->prepare("INSERT INTO fiche (id_employee,heures_cumul,absences,salaire,horaire) VALUES (:id_employee,:heures_cumul,:absences,:salaire,:horaire)");
+            $query->bindParam(':id_employee', $id);
+            $query->bindParam(':heures_cumul', $heures_cumul);
+            $query->bindParam(':absences', $absences);
+            $query->bindParam(':salaire', $salaire);
+            $query->bindParam(':horaire', $heur_travail);
+            $query->execute();
+
+
             return true;
 
         }catch(\Exception  $e){
 
-            // return msg error
-            // var_dump($e->getMessage());
-            // die();
+            var_dump($e->getMessage());
+            die();
 
         }
      

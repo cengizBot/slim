@@ -1,11 +1,13 @@
 <?php
 
 use API\ManagerApi;
+use Model\Employee;
 use Model\Token;
 use Slim\Csrf\Guard;
 
 // Get container
 $container = $app->getContainer();
+
 
 // Register component on container
 $container['view'] = function ($container) {
@@ -35,6 +37,19 @@ $container['api'] = function ($container) use ($config) {
 
     $api = new ManagerApi($container);
     return $api;
+
+};
+
+$container['EmployeeData'] = function ($container) use ($config) {
+
+        $id = $_SESSION['employee_data'];
+       
+        $employee = new Employee($container);
+    
+        $find = $employee->getById($id);
+
+        return $find;
+    
 
 };
 

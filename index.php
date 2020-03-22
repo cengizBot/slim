@@ -8,6 +8,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Config\Configuration as Conf;
 use ContainerRouter\testing;
+use Model\Employee;
 use Model\Users;
 use Slim\Views\Twig;
 use Model\Token;
@@ -44,16 +45,18 @@ require_once './app/middleware/HomeConnexionMiddle.php';
 require_once './app/middleware/HomeInscriptionMiddle.php';
 // post new employee Middleware
 require_once './app/middleware/PostEmployeeMiddle.php';
+
+// ---------- Middleware Interface ---------- // 
+require_once './app/middleware/Interface/InfoEmployeeMiddle.php';
 /////////////////////////////////////////////////////
 /////////////////////////////////////////////////////
 
 // require container for initialization
 require_once './app/config/container.php';
 
-
-
 $user = new Users($container);
 $token_user = new UserManager();
+
 
 
 
@@ -81,6 +84,10 @@ $app->post('/connexion', \App\Config\RouterView::class . ':homeConnexion')->add(
 
 //RH create employee
 $app->post('/addEmployee' , \App\Config\RouterView::class . ':addEmployee')->add(new \Middleware\Form\FormEmployeeSubmitInterface($container));
+
+//RH info employee
+$app->get('/employe/{id}' , \App\Config\RouterView::class . ':infoEmployee')->add(new \Middleware\Interfaces\InfoEmployee($container));
+
 
 $app->get('/test/{name}', \App\Config\RouterView::class . ':test');
 $app->get('/interface', \App\Config\RouterView::class . ':interface');

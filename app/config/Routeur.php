@@ -2,6 +2,7 @@
 
 namespace App\Config;
 
+use Model\Employee;
 use Model\UserManager;
 use Psr\Http\Message\ResponseInterface;
 

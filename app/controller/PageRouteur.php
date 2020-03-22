@@ -124,9 +124,6 @@ class RouterView extends RouterApp {
     }
 
 
-
-
-
    public function test(RequestInterface $request,Response $response, array $args){
 
     
@@ -135,6 +132,54 @@ class RouterView extends RouterApp {
    }
 
 
+   public function infoEmployee(RequestInterface $request,Response $response, array $args){
+
+    
+        //variable to get data about user if logged, pass into template
+         $userData = "";
+         // isset cookie token and decrypt it, if decrypt success user logged else user corrupt or not logged
+         if(isset($_COOKIE['token'])){
+ 
+             $token_user = $_COOKIE['token'];
+ 
+             $t = $this->user_manager->Decrypt($token_user);
+             $this->csrf_getToken = \Volnix\CSRF\CSRF::getToken();
+             
+             if($t){
+ 
+                $userData = $t;
+                if(!isset($_SESSION['form_error'])){
+                    $_SESSION['form_error'] = "";
+                
+                }
+
+                // middleware check if the id exists if there is a continuous route otherwise the route is cut and restart at /interface
+                $find = $this->container->get('EmployeeData');
+    
+                $date = new \DateTime($find[0]['date_entrer']);
+                $find[0]['date_entrer'] = $date->format('Y-m-d');
+
+                // if user is logged and decrypt token success render templates
+                return $this->render($response, '/pages/interface/infoEmployee.twig', ["data" =>  [ "employee" => $find,'user' => $userData ] ]);
+       
+                
+
+             }else{
+                 //else decrypt failed return "/"
+                 $response->withRedirect('/');
+                 //delete the cookie token if exist
+                 setcookie('jwt', '', time() - 3600);
+             }
+ 
+         }else{
+             
+         }
+
+         // no cookie token return "/"
+         return $response->withRedirect('/');
+   }
+
+   
     
 }
 

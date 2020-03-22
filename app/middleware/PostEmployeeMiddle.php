@@ -16,8 +16,7 @@ class FormEmployeeSubmitInterface extends Middleware {
     CONST int_r = "/^[0-9]*$/";
     CONST stringSpace_r =  "/^[a-zA-Z ]*$/";
     CONST date_r = "/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/";
-    private $employee;
-
+  
 
     public function __invoke($request, $response, $next)
     {
@@ -86,7 +85,7 @@ class FormEmployeeSubmitInterface extends Middleware {
                     array_push($_SESSION['form_error'],$error_city);
 
                 }else{
-                    if(!preg_match(self::stringSpace_r,$error_city)){
+                    if(!preg_match(self::stringSpace_r,$city)){
                         $error_city = [ "input" => "city", "error" => "Champ incorrect" ];
                         array_push($_SESSION['form_error'],$error_city);
                     }
@@ -150,9 +149,8 @@ class FormEmployeeSubmitInterface extends Middleware {
 
                 // 0 error in form go to inscription
                 if($error === 0 ){
-
-                    $this->employee = new Employee($name,$firstname,$email,$fonction,$years,$city,$enter_date,$this->container);
-                    $post = $this->employee->postEmployee();
+           
+                    $post = $this->employee->postEmployee($name,$firstname,$email,$fonction,$years,$city,$enter_date);
 
                     if(!$post){
                         // email already save
