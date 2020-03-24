@@ -64,6 +64,24 @@ class ManagerApi extends Token {
 
     }
 
+    public function search($string){
+        
+        $string = strip_tags($string);
+
+        $datas = $this->pdo->prepare("SELECT * FROM employes WHERE name LIKE :string ");
+        $datas->execute([":string" => '%'.$string.'%']);
+        $datas->execute();
+        
+        if($datas){
+            $results = $datas->fetchAll();
+            return $results;
+        }else{
+            return false;
+        }
+
+
+    }
+
     
 
 

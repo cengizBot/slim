@@ -116,7 +116,7 @@ Hcumul = parseInt(Hcumul);
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['Heures Cumulées', `Absences en Jours, ${absencesJ} jours ` , `Absences une journée en  H , ${absencesJ} h`,`Heures totaux absence , ${absencesJ} h`],
+        labels: ['Heures Cumulées', `Absences en Jours, ${absencesJ} jours ` , `Absences d'une journée en  H , ${Heures_abs} h`,`Heures totaux absence , ${TTHeuresABS} h`],
         datasets: [{
             label: 'Employe graphique ',
             data: [Hcumul, absencesJ,Heures_abs,TTHeuresABS],
