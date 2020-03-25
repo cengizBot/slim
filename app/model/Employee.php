@@ -88,7 +88,7 @@ class Employee {
     
     }
 
-    public function postEmployee($name = null,$firstname= null,$email= null,$fonction= null,$years= null,$city= null,$enter_date= null){
+    public function postEmployee($name,$firstname,$email,$fonction,$years,$city,$enter_date){
 
         try{
 

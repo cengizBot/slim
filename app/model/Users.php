@@ -75,7 +75,7 @@ class Users{
         $stmt->execute();
 
 
-        //else return true email not exist
+        //return true email not exist
         return true;
 
     }
